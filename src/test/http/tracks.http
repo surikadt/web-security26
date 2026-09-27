@@ -1,0 +1,41 @@
+# Author: Oleksii Hnidan
+# Project: web-security26 | Lab: 2 | File: tracks.http
+# Run the requests from top to bottom against the application on localhost:8080.
+
+@baseUrl = http://localhost:8080/api/v1/tracks
+
+### 1. Get all tracks
+GET {{baseUrl}}
+Accept: application/json
+
+### 2. Get one track
+GET {{baseUrl}}/1
+Accept: application/json
+
+### 3. Create a track (the in-memory service assigns id 4)
+POST {{baseUrl}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Be Quiet and Drive (Far Away)",
+  "artist": "Deftones",
+  "album": "Around the Fur",
+  "durationSeconds": 300
+}
+
+### 4. Update the created track
+PUT {{baseUrl}}/4
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Be Quiet and Drive (Far Away)",
+  "artist": "Deftones",
+  "album": "Around the Fur",
+  "durationSeconds": 301
+}
+
+### 5. Delete the created track
+DELETE {{baseUrl}}/4
+Accept: application/json
