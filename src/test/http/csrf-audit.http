@@ -1,0 +1,46 @@
+# Author: Oleksii Hnidan
+# Project: web-security26 | Lab: 4 | File: csrf-audit.http
+# Run from top to bottom. CSRF is disabled for this stateless API.
+
+@baseUrl = http://localhost:8080/api/v1/tracks
+
+### 1. Show all tracks - expected 200
+GET {{baseUrl}}
+Authorization: Basic admin admin
+Accept: application/json
+
+### 2. Read one track - expected 200
+GET {{baseUrl}}/1
+Authorization: Basic admin admin
+Accept: application/json
+
+### 3. Create one track - expected 201, createdBy admin
+POST {{baseUrl}}
+Authorization: Basic admin admin
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Be Quiet and Drive (Far Away)",
+  "artist": "Deftones",
+  "album": "Around the Fur",
+  "durationSeconds": 300
+}
+
+### 4. Update track 4 - expected 200, version 2
+PUT {{baseUrl}}/4
+Authorization: Basic admin admin
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Be Quiet and Drive (Far Away)",
+  "artist": "Deftones",
+  "album": "Around the Fur",
+  "durationSeconds": 301
+}
+
+### 5. Delete track 4 - expected 204
+DELETE {{baseUrl}}/4
+Authorization: Basic admin admin
+Accept: application/json
