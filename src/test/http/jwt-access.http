@@ -1,0 +1,57 @@
+# Author: Oleksii Hnidan
+# Project: web-security26 | Lab: 9 | File: jwt-access.http
+
+@baseUrl = http://localhost:8080/api/v1/tracks
+@adminToken = paste-admin-token-here
+@userToken = paste-user-token-here
+@superadminToken = paste-superadmin-token-here
+
+### 1. ADMIN token on admin route - 200
+GET {{baseUrl}}/hello/admin
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### 2. USER token on admin route - 403
+GET {{baseUrl}}/hello/admin
+Authorization: Bearer {{userToken}}
+Accept: application/json
+
+### 3. USER token on user route - 200
+GET {{baseUrl}}/hello/user
+Authorization: Bearer {{userToken}}
+Accept: application/json
+
+### 4. ADMIN token on user route - 403
+GET {{baseUrl}}/hello/user
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### 5. ADMIN token on member route - 200
+GET {{baseUrl}}/hello/member
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### 6. USER token on member route - 200
+GET {{baseUrl}}/hello/member
+Authorization: Bearer {{userToken}}
+Accept: application/json
+
+### 7. SUPERADMIN token on superadmin route - 200
+GET {{baseUrl}}/hello/superadmin
+Authorization: Bearer {{superadminToken}}
+Accept: application/json
+
+### 8. ADMIN token on superadmin route - 403
+GET {{baseUrl}}/hello/superadmin
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+### 9. SUPERADMIN token on authenticated catalog route - 200
+GET {{baseUrl}}
+Authorization: Bearer {{superadminToken}}
+Accept: application/json
+
+### 10. Invalid JWT on authenticated catalog route - 401
+GET {{baseUrl}}
+Authorization: Bearer invalid.jwt.token
+Accept: application/json
