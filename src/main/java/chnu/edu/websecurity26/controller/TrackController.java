@@ -8,6 +8,7 @@ import chnu.edu.websecurity26.model.Track;
 import chnu.edu.websecurity26.service.TrackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,21 +28,25 @@ public class TrackController {
     private final TrackService trackService;
 
     @GetMapping("/hello/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     public String helloAdmin() {
         return "Hello, administrator!";
     }
 
     @GetMapping("/hello/user")
+    @PreAuthorize("hasRole('USER')")
     public String helloUser() {
         return "Hello, user!";
     }
 
     @GetMapping("/hello/member")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public String helloMember() {
         return "Hello, music catalog member!";
     }
 
     @GetMapping("/hello/superadmin")
+    @PreAuthorize("hasRole('SUPERADMIN')")
     public String helloSuperadmin() {
         return "Hello, super administrator!";
     }

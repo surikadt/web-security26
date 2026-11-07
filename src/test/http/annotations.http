@@ -1,0 +1,53 @@
+# Author: Oleksii Hnidan
+# Project: web-security26 | Lab: 6 | File: annotations.http
+
+@baseUrl = http://localhost:8080/api/v1/tracks
+
+### 1. @PreAuthorize permits ADMIN - 200
+GET {{baseUrl}}/hello/admin
+Authorization: Basic admin admin
+Accept: application/json
+
+### 2. @PreAuthorize rejects USER - 403
+GET {{baseUrl}}/hello/admin
+Authorization: Basic user user
+Accept: application/json
+
+### 3. @PreAuthorize permits USER - 200
+GET {{baseUrl}}/hello/user
+Authorization: Basic user user
+Accept: application/json
+
+### 4. @PreAuthorize rejects ADMIN - 403
+GET {{baseUrl}}/hello/user
+Authorization: Basic admin admin
+Accept: application/json
+
+### 5. hasAnyRole permits ADMIN - 200
+GET {{baseUrl}}/hello/member
+Authorization: Basic admin admin
+Accept: application/json
+
+### 6. hasAnyRole permits USER - 200
+GET {{baseUrl}}/hello/member
+Authorization: Basic user user
+Accept: application/json
+
+### 7. @PreAuthorize permits SUPERADMIN - 200
+GET {{baseUrl}}/hello/superadmin
+Authorization: Basic superadmin superadmin
+Accept: application/json
+
+### 8. @PreAuthorize rejects ADMIN - 403
+GET {{baseUrl}}/hello/superadmin
+Authorization: Basic admin admin
+Accept: application/json
+
+### 9. Authenticated route without method annotation - 200
+GET {{baseUrl}}
+Authorization: Basic user user
+Accept: application/json
+
+### 10. Authentication is still required before method security - 401
+GET {{baseUrl}}/hello/member
+Accept: application/json
