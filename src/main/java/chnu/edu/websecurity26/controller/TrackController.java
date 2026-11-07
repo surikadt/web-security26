@@ -26,6 +26,26 @@ import java.util.List;
 public class TrackController {
     private final TrackService trackService;
 
+    @GetMapping("/hello/admin")
+    public String helloAdmin() {
+        return "Hello, administrator!";
+    }
+
+    @GetMapping("/hello/user")
+    public String helloUser() {
+        return "Hello, user!";
+    }
+
+    @GetMapping("/hello/member")
+    public String helloMember() {
+        return "Hello, music catalog member!";
+    }
+
+    @GetMapping("/hello/superadmin")
+    public String helloSuperadmin() {
+        return "Hello, super administrator!";
+    }
+
     @GetMapping
     public List<Track> getAll() {
         return trackService.getAll();
