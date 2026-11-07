@@ -6,6 +6,8 @@ package chnu.edu.websecurity26.service;
 
 import chnu.edu.websecurity26.model.Track;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,9 +22,9 @@ public class TrackService {
     private final AtomicLong nextId = new AtomicLong(4);
 
     public TrackService() {
-        tracks.put("1", new Track("1", "Digital Bath", "Deftones", "White Pony", 255));
-        tracks.put("2", new Track("2", "Subwoofer Lullaby", "C418", "Minecraft - Volume Alpha", 208));
-        tracks.put("3", new Track("3", "Doomsday", "MF DOOM", "Operation: Doomsday", 298));
+        seed(new Track("1", "Digital Bath", "Deftones", "White Pony", 255));
+        seed(new Track("2", "Subwoofer Lullaby", "C418", "Minecraft - Volume Alpha", 208));
+        seed(new Track("3", "Doomsday", "MF DOOM", "Operation: Doomsday", 298));
     }
 
     public List<Track> getAll() {
@@ -43,15 +45,17 @@ public class TrackService {
         validate(track);
         Track saved = new Track(String.valueOf(nextId.getAndIncrement()), track.getTitle(),
                 track.getArtist(), track.getAlbum(), track.getDurationSeconds());
+        saved.markCreated(currentUsername());
         tracks.put(saved.getId(), saved);
         return saved;
     }
 
     public Track update(String id, Track track) {
         validate(track);
-        get(id);
+        Track existing = get(id);
         Track saved = new Track(id, track.getTitle(), track.getArtist(),
                 track.getAlbum(), track.getDurationSeconds());
+        saved.copyAuditFrom(existing, currentUsername());
         tracks.put(id, saved);
         return saved;
     }
@@ -73,5 +77,17 @@ public class TrackService {
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
+    }
+
+    private void seed(Track track) {
+        track.markCreated("system");
+        tracks.put(track.getId(), track);
+    }
+
+    private String currentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication == null || !authentication.isAuthenticated()
+                ? "system"
+                : authentication.getName();
     }
 }
