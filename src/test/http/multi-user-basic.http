@@ -1,0 +1,53 @@
+# Author: Oleksii Hnidan
+# Project: web-security26 | Lab: 5 | File: multi-user-basic.http
+
+@baseUrl = http://localhost:8080/api/v1/tracks
+
+### 1. Admin may use the admin route - 200
+GET {{baseUrl}}/hello/admin
+Authorization: Basic admin admin
+Accept: application/json
+
+### 2. User may not use the admin route - 403
+GET {{baseUrl}}/hello/admin
+Authorization: Basic user user
+Accept: application/json
+
+### 3. User may use the user route - 200
+GET {{baseUrl}}/hello/user
+Authorization: Basic user user
+Accept: application/json
+
+### 4. Admin may not use the user-only route - 403
+GET {{baseUrl}}/hello/user
+Authorization: Basic admin admin
+Accept: application/json
+
+### 5. Admin is a catalog member - 200
+GET {{baseUrl}}/hello/member
+Authorization: Basic admin admin
+Accept: application/json
+
+### 6. User is a catalog member - 200
+GET {{baseUrl}}/hello/member
+Authorization: Basic user user
+Accept: application/json
+
+### 7. Superadmin may use the superadmin route - 200
+GET {{baseUrl}}/hello/superadmin
+Authorization: Basic superadmin superadmin
+Accept: application/json
+
+### 8. Admin may not use the superadmin route - 403
+GET {{baseUrl}}/hello/superadmin
+Authorization: Basic admin admin
+Accept: application/json
+
+### 9. Any authenticated user may list tracks - 200
+GET {{baseUrl}}
+Authorization: Basic superadmin superadmin
+Accept: application/json
+
+### 10. An anonymous user may not list tracks - 401
+GET {{baseUrl}}
+Accept: application/json
